@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sign up</title>
-</head>
-<body>
-    <h1>Sign up</h1>
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <div class="card-header">
+        <h1 class="card-title">Create Account</h1>
+    </div>
 
     <form method="post" action="{% url 'signup' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create account</button>
+        {% include 'components/form.html' %}
+        
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+        </div>
     </form>
 
-    <p>
-        Already have an account?
-        <a href="{% url 'login' %}">Login</a>
-    </p>
-</body>
-</html>
+    <div class="text-center mt-3">
+        <p style="color: var(--text-secondary);">
+            Already have an account?
+            <a href="{% url 'login' %}" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

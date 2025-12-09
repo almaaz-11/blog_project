@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Delete Post</title>
-</head>
-<body>
-    <h1>Delete Post</h1>
+{% extends 'base.html' %}
 
-    <p>Are you sure you want to delete "{{ object.title }}"?</p>
+{% block title %}Delete Post{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Delete Post</h1>
+    </div>
+
+    <div class="alert alert-warning">
+        <strong>Warning:</strong> This action cannot be undone.
+    </div>
+
+    <p style="font-size: 1.125rem; margin-bottom: 2rem;">
+        Are you sure you want to delete the post <strong>"{{ object.title }}"</strong>?
+    </p>
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-        <a href="{% url 'blog:post_detail' object.pk %}">Cancel</a>
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Yes, Delete Post</button>
+            <a href="{% url 'blog:post_detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

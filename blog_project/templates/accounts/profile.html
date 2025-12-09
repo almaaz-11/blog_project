@@ -1,31 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Your profile</title>
-</head>
-<body>
-    <h1>Your profile</h1>
+{% extends 'base.html' %}
 
-    <p>Logged in as: {{ request.user.username }}</p>
+{% block title %}Your Profile{% endblock %}
 
+{% block content %}
+<div class="profile-header">
+    <h1 class="card-title">Your Profile</h1>
+    <p style="color: var(--text-secondary);">Logged in as: <strong>{{ request.user.username }}</strong></p>
+</div>
+
+<div class="profile-info">
+    <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem; color: var(--text-primary);">Update Profile</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save changes</button>
+        {% include 'components/form.html' %}
+        
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
     </form>
+</div>
 
-    <h2>Your posts</h2>
-    <ul>
-        {% for post in request.user.post_set.all %}
-            <li>
-                <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
-            </li>
-        {% empty %}
-            <li>You have not written any posts yet.</li>
-        {% endfor %}
-    </ul>
+<div class="profile-posts">
+    <h2>Your Posts</h2>
+    {% if request.user.post_set.all %}
+        <ul class="profile-posts-list">
+            {% for post in request.user.post_set.all %}
+                <li>
+                    <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem; margin-left: 1rem;">
+                        ({{ post.created_at|date:"M d, Y" }})
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <p>You haven't written any posts yet.</p>
+            <a href="{% url 'blog:post_create' %}" class="btn btn-primary mt-3">Create Your First Post</a>
+        </div>
+    {% endif %}
+</div>
 
-    <p><a href="{% url 'blog:post_list' %}">Back to blog</a></p>
-    <p><a href="{% url 'logout' %}">Logout</a></p>
-</body>
-</html>
+<div class="mt-4">
+    <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">Back to Blog</a>
+</div>
+{% endblock %}
